@@ -10,7 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
 
-
+//File handler is the main class to handle CSV parsing, by communcating with cvworker.
 class FileUploadHandling extends React.Component {
     constructor(props) {
         super(props);
@@ -25,6 +25,7 @@ class FileUploadHandling extends React.Component {
 
     }
 
+    //Event listener for WASM openCV being loaded
     handleCVEvent(event) {
         this.setState({
             ...this.state, cvReady: true
@@ -32,6 +33,8 @@ class FileUploadHandling extends React.Component {
         console.log(event);
     }
 
+    //This is called after file are parsed and submitted back from cvWorker.
+    //This method renders the chart.js graphs.
     handleFileHandler(event) {
         const data = event.target.data;
         var cfdata = cf.default(data.data);
@@ -41,6 +44,7 @@ class FileUploadHandling extends React.Component {
         this.setState({ ...this.state, charts: chart, model: Models, headType: data.headType, fileContent: data.data })
     }
 
+    //Assigning event listeners
     componentDidMount() {
         // ReactDOM.findDOMNode(this).addEventListener('nv-event', this.handleNVEvent);
         window.addEventListener('FileHandler', this.handleFileHandler.bind(this));
@@ -51,6 +55,7 @@ class FileUploadHandling extends React.Component {
 
     handleClose = () => this.setState({ open: false });
 
+    //As the name suggested to handle file uploads and posting file input object to cvWorker
     fileUploadHandling = async (event) => {
         event.persist();
         if (!event.target || !event.target.files) {
@@ -82,25 +87,29 @@ class FileUploadHandling extends React.Component {
         cvworker.postMessage({ file: latestUploadedFile });
     };
 
-
+    //Using crossFilter to filter CSV parsed objects
     overallInstanceCount(cxt) {
         return cxt.groupAll().reduceCount().value();
     }
 
+    //Using crossFilter to filter CSV parsed objects
     featureNumInstanceCount(cxt, feature) {
         return cxt.groupAll().reduceSum(function (fact) { return fact[feature]; }).value();
     }
 
+    //Using crossFilter to filter CSV parsed objects
     createDimension(cxt, type) {
         return cxt.dimension(function (fact) { return fact[type]; })
     }
 
+    //Using crossFilter to filter CSV parsed objects
     createFilter(cxt, filter) {
         const filterConstru = this.createDimension(cxt, filter.type);
         filterConstru.filter(function (fact) { return fact[filter.thing] || filter.thing });
         return filterConstru;
     }
 
+    //Using crossFilter to filter CSV parsed objects
     groupByCount(cxt, type, top, filter) {
         if (filter === undefined) {
             filter = this.createDimension(cxt, type);
@@ -109,11 +118,13 @@ class FileUploadHandling extends React.Component {
         return groupByCount.top(top)
     }
 
-    float64 = (val, row, col) => {
-        const float64_t_arr = new Float64Array(val);
-        var matrix = window.wasm.copytovec(float64_t_arr, row, col)
-        return matrix;
-    }
+    //This is the currently not in use, but orginally related to Dlib wasm for parsing Float64 Array
+    //Into matrix, which requires C++ code, eigen, pointers and emscripten addresses.
+    // float64 = (val, row, col) => {
+    //     const float64_t_arr = new Float64Array(val);
+    //     var matrix = window.wasm.copytovec(float64_t_arr, row, col)
+    //     return matrix;
+    // }
 
     handleRender = name => event => {
         this.setState({ ...this.state, [name]: event.target.checked });

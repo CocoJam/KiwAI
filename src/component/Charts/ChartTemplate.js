@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+//Abstract class for every chart given
 class ChartTemplate extends React.Component {
 
     componentDidMount() {

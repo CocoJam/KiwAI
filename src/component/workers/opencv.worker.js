@@ -7,7 +7,10 @@ self.postMessage({cvReady:null});
 var numericArray = null;
 var cxt = null;
 var scheme = null;
+
+//This is the worker's listener for posted messages.
 self.addEventListener('message', (event) => {
+    //This is to handle posted file input object.
     if (event.data.file !== undefined) {
         const fileContents = readAsBinaryString(event.data.file).then(val => {
             return fileContentParse(val);
@@ -16,6 +19,7 @@ self.addEventListener('message', (event) => {
             scheme = bootStrapParser(val);
         });
     }
+    //This is to handle data required to be render by off screen canvas. But currently not in use.
     else if (event.data.type !== undefined) {
         const dimension = this.createDimension(cxt, event.data.type);
         const colors = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b", "#c49c94"];
@@ -66,6 +70,9 @@ function trainTestDataSplit(data, ratio) {
 
 }
 
+//This an bootstrap method to generate encoders and decoders based plus spliting the data set into features and single col of labels.
+//This is because openCV of generally C++ ml library requires speific mat(Matrix) class, which is templated.
+//Hence that means categories of feature is represented by numeric values.
 function featuresPredictionSplit(parsedCSV, preduction, encoderedHeaders, labelEncoder) {
     const predictions = []
     console.log(labelEncoder)
@@ -102,6 +109,8 @@ function featuresPredictionSplit(parsedCSV, preduction, encoderedHeaders, labelE
     return { features: numericArray, predictions: predictions, varType: Object.values(varType) }
 }
 
+//Bootstrap method to parse the CSV object into a scheme, which should contain most information
+//About the dataset, while generating the associated encoders and decoders.
 function bootStrapParser(val) {
     var scheme = {
         parsedCSV: null,
@@ -136,6 +145,7 @@ function bootStrapParser(val) {
     return scheme;
 }
 
+//Typed mat32 float method generate
 function creatMat32f(rows, col, data, type) {
     var Mat = new cv.Mat(rows, col, type),
         Data = Mat.data32f();
@@ -143,6 +153,7 @@ function creatMat32f(rows, col, data, type) {
     return Mat;
 }
 
+//Typed mat32 int method generate
 function creatMat32s(rows, col, data, type) {
     var Mat = new cv.Mat(rows, col, type),
         Data = Mat.data32s();
@@ -150,6 +161,7 @@ function creatMat32s(rows, col, data, type) {
     return Mat;
 }
 
+//Bootstrap method to generate General generic models fitted with input feature mat and label mat
 function bootStrapModel(val, model, varType, keep) {
     console.log(val)
     console.log("bootstaping")
@@ -271,7 +283,7 @@ function createNormalBayesClassifier(val) {
     return NormalBayesClassifier;
 }
 
-
+//SVM testing method
 function svmTesting(svmType, kernelType, gamma) {
     var svm = new cv.ml_SVM();
     var type = svmType.value
@@ -333,6 +345,7 @@ function svmTesting(svmType, kernelType, gamma) {
     holder.delete();
 }
 
+//random forest testing method
 function rTreeTesting() {
     var rtree = new cv.ml_RTrees();
     rtree.setCalculateVarImportance(true);

@@ -15,7 +15,6 @@
       postRun: [],
       onRuntimeInitialized: function () {
         console.log("Runtime is ready...");
-        // QUnit.start();
         window.dispatchEvent(new CustomEvent("cv", { cvReady: cv }))
       },
       print: (function () {

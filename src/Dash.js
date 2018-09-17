@@ -9,10 +9,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MainListItem from './listItems';
 import FileUploadHandler from "./component/FileHandler";
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -20,7 +18,6 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import VideoCam from "@material-ui/icons/VideoCam";
 import NoteAdd from "@material-ui/icons/NoteAdd"
 import LinearProgress from '@material-ui/core/LinearProgress';
-import VideoCamHandler from "./component/VideoCamHandler"
 
 const drawerWidth = 240;
 
@@ -162,11 +159,6 @@ class Dashboard extends React.Component {
               <Typography variant="title" color="inherit" noWrap className={classes.title}>
                 Dashboard
               </Typography>
-              <IconButton color="inherit">
-                {/* <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge> */}
-              </IconButton>
             </Toolbar>
             {linearChart}
           </AppBar>
@@ -192,8 +184,7 @@ class Dashboard extends React.Component {
             <Typography component="div" className={classes.chartContainer}>
             </Typography>
             <div className={classes.tableContainer}>
-              {/* <FileUploadHandler /> */}
-              <VideoCamHandler height={500} width={500} />
+              <FileUploadHandler />
             </div>
           </main>
         </div>

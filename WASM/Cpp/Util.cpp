@@ -14,21 +14,17 @@
 #include <Eigen/Dense>
 #include <math.h> 
 #include <experimental/string_view>
-// em++ -std=c++17 --bind -L lib/dlib/build/dlib/libdlib.so -I lib/dlib Util.cpp -o ../WASM/dlib.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['addOnPostRun'] -s WASM=1 -s ALLOW_MEMORY_GROWTH=1
 #include <iostream>
 #include <dlib/matrix.h>
 #include "Emscripten_Matrix.hpp"
 using namespace dlib;
 using namespace std;
-//em++ -std=c++17 --bind -L lib/dlib/build/dlib/libdlib.so -I lib/dlib Util.cpp  -L lib/eigen/libeigen_blas.so -I lib/eigen -o ../WASM/dlib2.js -s EXTRA_EXPORTED_RUNTIME_METHODS=['addOnPostRun'] -s WASM=1 -s ALLOW_MEMORY_GROWTH=1
-//em++ -std=c++17 --bind -L lib/dlib/build/dlib/libdlib.so -I lib/dlib Util.cpp  -L lib/eigen/libeigen_blas.so -I lib/eigen -o ../WASM/dlib2.js -s MODULARIZE=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=['addOnPostRun'] -s WASM=1 -s ALLOW_MEMORY_GROWTH=1
 
 
 std::vector<std::string_view> splitSV(std::string_view strv, std::string_view delims = " ")
 {
     std::vector<std::string_view> output;
     size_t first = 0;
-    // std::string_view strv = str;
     while (first < strv.size())
     {
         const auto second = strv.find_first_of(delims, first);
